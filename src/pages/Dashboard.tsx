@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import {
   UserGroupIcon,
@@ -36,22 +37,44 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="space-y-8">
-      <div className={`${getCardClasses()}`}>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-8"
+    >
+      <motion.div variants={item} className={`${getCardClasses()}`}>
         <h2 className={`text-2xl font-semibold text-${theme.color}-600 mb-4`}>
           Welcome back!
         </h2>
         <p className="text-gray-600">
           Track your CRM metrics and manage customer relationships efficiently.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <div
+          <motion.div
             key={stat.name}
-            className={`${getCardClasses()} transform transition-all duration-200 hover:scale-105`}
+            variants={item}
+            whileHover={{ scale: 1.02 }}
+            className={`${getCardClasses()} transform transition-all duration-200`}
           >
             <div className="flex items-center">
               <div className={`p-3 rounded-lg bg-${theme.color}-100`}>
@@ -64,35 +87,47 @@ const Dashboard: React.FC = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className={`${getCardClasses()}`}>
+        <motion.div variants={item} className={`${getCardClasses()}`}>
           <h3 className={`text-lg font-semibold text-${theme.color}-600 mb-4`}>
             Recent Activities
           </h3>
           <div className="space-y-4">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="flex items-center py-2 border-b border-gray-100">
+              <motion.div
+                key={item}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: item * 0.1 }}
+                className="flex items-center py-2 border-b border-gray-100"
+              >
                 <div className={`w-2 h-2 rounded-full bg-${theme.color}-500 mr-3`} />
                 <div>
                   <p className="text-sm font-medium">New customer signed up</p>
                   <p className="text-xs text-gray-500">2 hours ago</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className={`${getCardClasses()}`}>
+        <motion.div variants={item} className={`${getCardClasses()}`}>
           <h3 className={`text-lg font-semibold text-${theme.color}-600 mb-4`}>
             Upcoming Tasks
           </h3>
           <div className="space-y-4">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="flex items-center justify-between py-2 border-b border-gray-100">
+              <motion.div
+                key={item}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: item * 0.1 }}
+                className="flex items-center justify-between py-2 border-b border-gray-100"
+              >
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -101,12 +136,12 @@ const Dashboard: React.FC = () => {
                   <span className="ml-3 text-sm">Follow up with Client #{item}</span>
                 </div>
                 <span className="text-xs text-gray-500">Tomorrow</span>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
